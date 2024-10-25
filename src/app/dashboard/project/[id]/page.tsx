@@ -13,7 +13,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useParams } from 'next/navigation';
 
 interface File {
-  id: string;
+  _id: string;
   name: string;
   type: 'file' | 'package';
   content: string;
@@ -47,7 +47,7 @@ export default function Page() {
 
   const handleEditorChange = (value: string | undefined) => {
     if (selectedFile && value !== undefined) {
-      setFiles(files.map(f => f.id === selectedFile.id ? { ...f, content: value } : f));
+      setFiles(files.map(f => f._id === selectedFile._id ? { ...f, content: value } : f));
       debouncedUpdateCode(value);
     }
   };
@@ -57,7 +57,7 @@ export default function Page() {
       case 'rename':
         const newName = prompt('Enter new name:', file.name);
         if (newName) {
-          setFiles(files.map(f => f.id === file.id ? { ...f, name: newName } : f));
+          setFiles(files.map(f => f._id === file._id ? { ...f, name: newName } : f));
         }
         break;
       case 'open':
@@ -65,8 +65,8 @@ export default function Page() {
         break;
       case 'delete':
         if (confirm(`Are you sure you want to delete ${file.name}?`)) {
-          setFiles(files.filter(f => f.id !== file.id));
-          if (selectedFile?.id === file.id) {
+          setFiles(files.filter(f => f._id !== file._id));
+          if (selectedFile?._id === file._id) {
             setSelectedFile(null);
           }
         }
