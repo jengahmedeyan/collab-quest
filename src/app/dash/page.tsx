@@ -13,7 +13,6 @@ import {
 import { Editor } from "@monaco-editor/react"
 import { api } from "@/convex/_generated/api"
 import { useMutation, useQuery} from "convex/react"
-import debounce from "@/util/debounce"
 import {
   Tooltip,
   TooltipContent,
@@ -22,6 +21,7 @@ import {
 } from "@/components/ui/tooltip"
 import { SignInButton, } from "@clerk/nextjs";
 import { Unauthenticated } from "convex/react";
+import debounce from 'lodash.debounce'
 
 
 
@@ -92,7 +92,7 @@ export default function Page() {
   )
 
   useEffect(() => {
-    if (fetchFileData && selectedFile) {
+    if (fetchFileData && selectedFile && fetchFileData.content) {
       setFiles((prevFiles) =>
         prevFiles.map(f =>
           f.id === selectedFile.id
@@ -102,6 +102,12 @@ export default function Page() {
       );
     }
   }, [fetchFileData, selectedFile]);
+  
+  useEffect(() => {
+    return () => {
+      debouncedUpdateCode.cancel();
+    };
+  }, []);
   
   
   const fileContent = selectedFile?.content;

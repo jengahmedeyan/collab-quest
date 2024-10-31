@@ -2,9 +2,19 @@ import { mutation, query } from "@/generated/server";
 import { v } from "convex/values";
 
 export const getFile = query({
-  args: { fileId: v.id("files") },
+  args: {
+    fileId: v.optional(v.id("files")),
+  },
   handler: async (ctx, args) => {
-    return await ctx.db.get(args.fileId);
+    if (!args.fileId) {
+      return null;
+    }
+    try {
+      return await ctx.db.get(args.fileId);
+    } catch (error) {
+      console.error("Error fetching file:", error);
+      return null;
+    }
   },
 });
 

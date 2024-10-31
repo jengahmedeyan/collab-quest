@@ -22,7 +22,6 @@ export const createProject = mutation({
   },
   
   handler: async (ctx, args) => {
-    // Step 1: Insert the new project into the projects table
     const newProjectId = await ctx.db.insert("projects", {
       name: args.name,
       description: args.description || "",
@@ -30,15 +29,11 @@ export const createProject = mutation({
       ownerId: args.ownerId
     });
 
-    // Step 2: Check if templateId is provided
     if (args.templateId) {
-      // Step 3: Fetch the template and assert its type
-      const templateId = args.templateId as Id<"templates">; // Cast to Id<"templates">
+      const templateId = args.templateId as Id<"templates">;
       const template = await ctx.db.get(templateId) as Template;
 
-      // Step 4: Insert files from the template into the project_files table
       if (template && template.files) {
-        // Create an array of file objects with the necessary fields
         const fileInserts: { 
           projectId: Id<"projects">; 
           name: string; 
@@ -58,8 +53,6 @@ export const createProject = mutation({
     return { projectId: newProjectId };
   },
 });
-
-
 
 
 export const createTemplate = mutation({
@@ -111,4 +104,3 @@ export const listProjects = query({
     return await ctx.db.query("projects").collect();
   },
 });
-

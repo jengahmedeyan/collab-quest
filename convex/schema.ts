@@ -6,27 +6,28 @@ export default defineSchema({
     content: v.string(),
     title: v.string(),
   }),
-
-  projects: defineTable({
+  files: defineTable({
+    content: v.string(),
+    language: v.string(),
     name: v.string(),
-    description: v.optional(v.string()),
-    templateId: v.optional(v.string()),
-    ownerId: v.string()
+    projectId: v.id("projects"),
+  }),
+  projects: defineTable({
+    description: v.string(),
+    name: v.string(),
+    ownerId: v.string(),
+    templateId: v.id("templates"),
   }),
   templates: defineTable({
+    description: v.string(),
+    files: v.array(
+      v.object({
+        content: v.string(),
+        id: v.string(),
+        language: v.string(),
+        name: v.string(),
+      })
+    ),
     name: v.string(),
-    description: v.optional(v.string()),
-    files: v.array(v.object({
-      id: v.string(),
-      name: v.string(),
-      content: v.string(),
-      language: v.string(),
-    }))
-  }),
-  files: defineTable({
-    projectId: v.id("projects"),
-    name: v.string(),
-    content: v.optional(v.string()),
-    language: v.string(),
   }),
 });

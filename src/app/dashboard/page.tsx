@@ -13,6 +13,8 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { redirect } from "next/navigation";
+
 
 export default function Dashboard() {
   const { user } = useUser()
@@ -38,6 +40,10 @@ export default function Dashboard() {
     } finally {
       setIsCreating(false)
     }
+  }
+
+  if (!user) {
+    redirect("/sign-in");
   }
 
   return (
