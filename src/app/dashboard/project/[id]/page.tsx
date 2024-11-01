@@ -49,10 +49,6 @@ export default function Page() {
   const [searchTerm, setSearchTerm] = useState('');
 
   const updateCode = useMutation(api.functions.file.updateFile);
-
-  const fetchFileData = useQuery(api.functions.file.getFile, {
-      fileId: selectedFile?._id
-  });
   const fetchedFiles = useQuery(api.functions.file.listFilesForProject, { projectId: id });
 
   useEffect(() => {
@@ -71,15 +67,6 @@ export default function Page() {
       debouncedSave(selectedFile._id, value);
     }
   };
-
-  const debouncedUpdateCode = debounce((newCode: string | unknown) => {
-    if (selectedFile) {
-      updateCode({
-        fileId: selectedFile._id,
-        newContent: newCode,
-      });
-    }
-  }, 500);
   
   const handleFileAction = (action: string, file: File) => {
     switch (action) {
